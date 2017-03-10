@@ -1,0 +1,26 @@
+{
+  "name": "stickpackage",
+  "version": "1.0.0",
+  "description": "NodeJs的TCP中的粘包、分包问题的解决方案",
+  "main": "stickPackage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvgithub/stickPackage.git"
+  },
+  "keywords": [
+    "stickPackage",
+    "tcp",
+    "node",
+    "粘包",
+    "缓存"
+  ],
+  "author": "刘威",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lvgithub/stickPackage/issues"
+  },
+  "homepage": "https://github.com/lvgithub/stickPackage#readme"
+}
