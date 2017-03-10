@@ -73,6 +73,7 @@ var StackBuffer = function (bufferLength) {
             if (bufferTailLength < 0) {
                 console.log('程序有漏洞，bufferTailLength < 0 ');
             }
+            // 数据尾部位置
             let dataEndPosition = dataSatrt + bufferTailLength;
             data.copy(_buffer, _dataWritePosition, dataSatrt, dataEndPosition);
 
@@ -81,7 +82,7 @@ var StackBuffer = function (bufferLength) {
 
             // data剩余未拷贝进缓存的长度
             let unDataCopyLen = dataLength - bufferTailLength;
-            data.copy(_buffer, _dataReadPosition, dataSatrt, dataSatrt + unDataCopyLen);
+            data.copy(_buffer, _dataWritePosition, dataSatrt, dataSatrt + unDataCopyLen);
             // 记录数据长度
             _dataLen = _dataLen + dataLength;
             // 记录buffer可写位置
@@ -172,7 +173,12 @@ var StackBuffer = function (bufferLength) {
     // 获取缓存数据长度
     function getDataLen() {
         let dataLen = 0;
-        if (_dataWritePosition >= _dataReadPosition) {
+        // 缓存全满
+        if (_dataLen === _bufferLength && _dataWritePosition >= _dataReadPosition) {
+            dataLen = _bufferLength;
+        }
+        // 缓存全部数据读空
+        else if (_dataWritePosition >= _dataReadPosition) {
             dataLen = _dataWritePosition - _dataReadPosition;
         }
         else {
