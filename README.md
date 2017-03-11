@@ -1,7 +1,7 @@
 #Stickpackage
 
 
-###  StickPackage，NodeJs的TCP中的粘包、分包问题的解决方案！
+###  StickPackage，NodeJs中TCP粘包、分包解决方案！
 
 配置介绍
 
