@@ -36,6 +36,12 @@ console.log('log:传入两个包,一次Put[验证一次性Put数据包]');
 // 处理粘包
 stick.putData(bytes3);
 
+// 结果显示
+// receive data,length:4
+// receive data,contents:{"type":"Buffer","data":[0,2,102,102]}
+// receive data,length:6
+// receive data,contents:{"type":"Buffer","data":[0,4,136,2,17,17]}
+
 ```
 
 
