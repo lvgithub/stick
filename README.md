@@ -34,7 +34,7 @@ let bytes = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0
 console.log('log:传入两个包,一次Put[验证一次性Put数据包]');
 
 // 处理粘包
-stick.putData(bytes3);
+stick.putData(bytes);
 
 // 结果显示
 // receive data,length:4
