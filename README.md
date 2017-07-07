@@ -1,10 +1,11 @@
 #Stickpackage
 
 
-###  StickPackage，NodeJs中TCP粘包、分包解决方案！
+##  StickPackage，NodeJs中TCP粘包、分包解决方案！
 
 [持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
-配置介绍
+
+## 配置介绍
 
 * [x] 提供对TCP粘包处理的解决方案
 * [x] 默认缓冲512个字节，当接收数据超过512字节，自动以512倍数扩大缓冲空间
@@ -13,20 +14,20 @@
 * [x] 可以配置大端小端读取
 * [x] 可以配置自定义包头长度
 
-Changes:
+## Changes:
 
 * 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法:
 ```
 setReadIntBE(type) ,setReadIntLE(type)  type:16  包头长度为2，short类型
 setReadIntBE(type) ,setReadIntLE(type)  type:32  包头长度为4，int类型
 ```
-安装
+## 安装
 ```
 npm i stickpackage
 ```
 ---
 
-使用方法
+## 使用方法
 ```
 var Stick = require('stickpackage');
 let stick = new Stick(1024).setReadIntBE('16')
@@ -58,7 +59,10 @@ stick.putData(data2_2);
 //  运行结果：   
 //  receive data,length:4 <Buffer 00 02 66 66>  
 //  receive data,length:6 <Buffer 00 04 88 02 11 11>
-//  receive data,length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
+//  receive data,length:2 <Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 ```
 
-[源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
+## Example
+    tcp客户端和tcp服务的之间通过stick进行粘包处理通信,详细内容见example文件夹
+
+## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
