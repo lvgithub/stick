@@ -1,5 +1,5 @@
-var Stick = require('./app');
-let stick = new Stick();
+var Stick = require('./index');
+let stick = new Stick(1024);
 //  构造一个buffer,包含两个数据包，10个字节
 let bytes3 = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
 

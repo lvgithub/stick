@@ -8,7 +8,7 @@ var StackBuffer = function (bufferLength) {
     let _dataHeadLen = 2;//数据包头长度
     let _dataLen = 0;//已经接收数据的长度
 
-    let _bufferLength = 512;//buffer默认长度
+    let _bufferLength = bufferLength || 512;//buffer默认长度
     let _buffer = Buffer.alloc(bufferLength || _bufferLength);//申请内存
 
     // 数据包接收完整后触发事件
