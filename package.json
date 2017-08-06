@@ -1,6 +1,6 @@
 {
   "name": "stickpackage",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "NodeJs的TCP中的粘包、分包问题的解决方案",
   "main": "stickPackage.js",
   "scripts": {
