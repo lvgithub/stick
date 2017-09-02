@@ -9,9 +9,18 @@
 * [x] 默认缓冲512个字节，当接收数据超过512字节，自动以512倍数扩大缓冲空间
 * [x] 本默认采用包头两个字节表示包长度
 * [x] 默认采用大端接模式接收数据
-* [] 可以配置自定义包头长度[后期迭代]
-* [] 可以配置大端小端读取[后期迭代]
+* [x] 可以配置大端小端读取
+* [x] 可以配置自定义包头长度
 
+Changes:
+
+*　* 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法:
+```
+     setReadIntBE(16) ,setReadIntLE(16) 
+     * type:16  包头长度为2，short类型
+     setReadIntBE(32) ,setReadIntLE(32)
+     * type:32  包头长度为4，int类型
+```
 安装
 ```
 npm i stickpackage
@@ -20,8 +29,9 @@ npm i stickpackage
 
 使用方法
 ```
-var Stick = require('./stickPackage');
-let stick = new Stick( {bufferLength:1024} );
+const Stick = require('./stickPackage');
+const stick = new Stick( {bufferLength:1024} ).setReadIntBE(16);
+#const stick = new Stick( {bufferLength:1024} ).setReadIntBE(32);
 
 # 收到完整数据触发
 stick.onData(function (data) {

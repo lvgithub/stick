@@ -11,10 +11,31 @@ var StackBuffer = function (bufferLength) {
     let _bufferLength = bufferLength || 512;//buffer默认长度
     let _buffer = Buffer.alloc(bufferLength || _bufferLength);//申请内存
 
+    let _readIntMethod = 'readInt16BE'
+
+    /**
+     * 设置大端接收
+     * type:16  包头长度为2，short类型
+     * type:32  包头长度为4，int类型
+     */
+    this.setReadIntBE = function (type) {
+        _readIntMethod = 'readInt' + type + 'BE'
+        return this
+    }
+
+    /**
+     * 设置小端接收
+     * type:16  包头长度为2，short类型
+     * type:32  包头长度为4，int类型
+     */
+    this.setReadIntLE = function (type) {
+        _readIntMethod = 'readInt' + type + 'lE'
+        return this
+    }
+
     // 数据包接收完整后触发事件
     this.onData = function (callback) {
         _event.on('data', callback)
-        // console.log('onData');
     }
 
     // 数据包错误触发事件
@@ -127,11 +148,11 @@ var StackBuffer = function (bufferLength) {
                 let unReadHeadLen = _dataHeadLen - buffLastCanReadLen;
                 _buffer.copy(headBuffer, buffLastCanReadLen, 0, unReadHeadLen)
                 // 默认大端接收数据
-                dataLen = headBuffer.readInt16BE() + _dataHeadLen;
+                dataLen = headBuffer[_readIntMethod]() + _dataHeadLen;
             }
             else {
                 _buffer.copy(headBuffer, 0, _dataReadPosition, _dataReadPosition + _dataHeadLen);
-                dataLen = headBuffer.readInt16BE();
+                dataLen = headBuffer[_readIntMethod]();
                 dataLen += _dataHeadLen
             }
             // 数据长度不够读取，直接返回
