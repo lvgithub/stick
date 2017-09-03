@@ -15,7 +15,7 @@
 
 Changes:
 
-*　* 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法:
+* 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法:
 ```
      setReadIntBE(16) ,setReadIntLE(16) 
      * type:16  包头长度为2，short类型
