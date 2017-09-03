@@ -1,8 +1,8 @@
 var Stick = require('./index');
-let stick = new Stick(1024).setReadIntBE('32')
+let stick = new Stick(1024).setReadIntBE('16')
 
 //  构造一个buffer,包含两个数据包，10个字节
-let data = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x00, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
+let data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
 
 /*  构造两个buffer
 *   data2_1包含:
@@ -21,10 +21,10 @@ stick.onData(function (data) {
 });
 
 console.log('Log:传入两个包,一次Put[验证一次性Put数据包]');
-stick.putData(data);
+stick.putData(data);//receive data,length:4 <Buffer 00 02 66 66>
 console.log('Log:传入两个包,分两次Put[验证分两次Put数据包]');
 stick.putData(data2_1);
-stick.putData(data2_2);
+stick.putData(data2_2);// receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 
 
 // // 构造一个512个字节长度的数据。用来测试缓存满的情况

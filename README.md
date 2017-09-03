@@ -3,7 +3,7 @@
 
 ###  StickPackage，NodeJs中TCP粘包、分包解决方案！
 
-[持續更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
+[持续，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
 配置介绍
 
 * [x] 提供对TCP粘包处理的解决方案
@@ -17,10 +17,8 @@ Changes:
 
 * 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法:
 ```
-     setReadIntBE(16) ,setReadIntLE(16) 
-     * type:16  包头长度为2，short类型
-     setReadIntBE(32) ,setReadIntLE(32)
-     * type:32  包头长度为4，int类型
+setReadIntBE(16) ,setReadIntLE(16) * type:16  包头长度为2，short类型
+setReadIntBE(32) ,setReadIntLE(32) * type:32  包头长度为4，int类型
 ```
 安装
 ```
@@ -30,33 +28,37 @@ npm i stickpackage
 
 使用方法
 ```
-const Stick = require('./stickPackage');
-const stick = new Stick( {bufferLength:1024} ).setReadIntBE(16);
-#const stick = new Stick( {bufferLength:1024} ).setReadIntBE(32);
+var Stick = require('./index');
+let stick = new Stick(1024).setReadIntBE('16')
 
-# 收到完整数据触发
+/*
+*  包含两个数据包,10个字节,包头为short，两个字节：[0x00, 0x02],[ 0x00, 0x04]
+*  数据包1:[0x00, 0x02, 0x66, 0x66]
+*  数据包2:[0x00, 0x04, 0x88, 0x02, 0x11, 0x11]
+*/
+let data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
+
+/*  构造两个buffer
+*   data2_1包含:  第一个数据包的全部数据,第二个数据包的部分数据	
+*   data2_2包含:  第二个数据包的剩余数据
+*/
+let data2_1 = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11]);
+let data2_2 = Buffer.from([0x11]);
+
+// 设置收到完整数据触发器
 stick.onData(function (data) {
     console.log('receive data,length:' + data.length);
-    console.log('receive data,contents:' + JSON.stringify(data));
+    console.log(data)
 });
 
-# 构造一个buffer,包含两个数据包，10个字节
-# data1 [0x00, 0x02, 0x66, 0x66] 0x00 0x02 代表的是包长度为2
-# data2 [0x00, 0x04, 0x88, 0x02, 0x11, 0x11] 0x00 0x04 代表的是包长度为4
+stick.putData(data);        
+stick.putData(data2_1);
+stick.putData(data2_2);  
 
-let bytes = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]); 
-
-# 处理粘包
-stick.putData(bytes);
-
-# 结果显示
-# receive data,length:4
-# receive data,contents:{"type":"Buffer","data":[0,2,102,102]} 
-
-# receive data,length:6
-# receive data,contents:{"type":"Buffer","data":[0,4,136,2,17,17]}
-
+ 运行结果：   
+//  receive data,length:4 <Buffer 00 02 66 66>  
+//  receive data,length:6 <Buffer 00 04 88 02 11 11>
+//  receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 ```
-
 
 [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
