@@ -3,7 +3,7 @@
 
 ###  StickPackage，NodeJs中TCP粘包、分包解决方案！
 
-[持续，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
+[持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
 配置介绍
 
 * [x] 提供对TCP粘包处理的解决方案
