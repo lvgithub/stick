@@ -28,7 +28,7 @@ npm i stickpackage
 
 使用方法
 ```
-var Stick = require('./index');
+var Stick = require('stickpackage');
 let stick = new Stick(1024).setReadIntBE('16')
 
 /*
@@ -58,7 +58,7 @@ stick.putData(data2_2);
  运行结果：   
 //  receive data,length:4 <Buffer 00 02 66 66>  
 //  receive data,length:6 <Buffer 00 04 88 02 11 11>
-//  receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
+//  receive data,length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 ```
 
 [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
