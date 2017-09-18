@@ -32,6 +32,8 @@ var StackBuffer = function (bufferLength) {
      */
     this.setReadIntLE = function (type) {
         _readIntMethod = 'readInt' + type + 'LE'
+        (+type === 16) && (_dataHeadLen = 2);
+        (+type === 32) && (_dataHeadLen = 4)
         return this
     }
 
