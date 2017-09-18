@@ -31,7 +31,7 @@ var StackBuffer = function (bufferLength) {
      * type:32  包头长度为4，int类型
      */
     this.setReadIntLE = function (type) {
-        _readIntMethod = 'readInt' + type + 'lE'
+        _readIntMethod = 'readInt' + type + 'LE'
         return this
     }
 
