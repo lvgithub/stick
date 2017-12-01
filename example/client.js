@@ -1,10 +1,10 @@
 const net = require('net')
 
 const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function () {
-    let body = Buffer.from('username=123&password=1234567,qwe')
+    const body = Buffer.from('username=123&password=1234567,qwe')
 
     // 写入包头
-    let headBuf = new Buffer(4)
+    const headBuf = new Buffer(4)
     headBuf.writeUInt32BE(body.byteLength, 0)
     console.log('data length: ' + headBuf.readInt32BE())
 
