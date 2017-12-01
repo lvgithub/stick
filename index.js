@@ -1,7 +1,7 @@
 "use strict";
-var EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events').EventEmitter;
 
-var StackBuffer = function (bufferLength) {
+const StackBuffer = function (bufferLength) {
     let _event = new EventEmitter();
     let _dataWritePosition = 0;//数据存储起始位置
     let _dataReadPosition = 0;//数据存储结束位置
