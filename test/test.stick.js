@@ -1,4 +1,4 @@
-const Stick = require('./index');
+const Stick = require('../index').stick;
 const stick = new Stick(1024).setReadIntBE('16')
 
 //  构造一个buffer,包含两个数据包，10个字节
@@ -20,9 +20,9 @@ stick.onData(function (data) {
     console.log(data)
 });
 
-console.log('Log:传入两个包,一次Put[验证一次性Put数据包]');
+// console.log('Log:传入两个包,一次Put[验证一次性Put数据包]');
 stick.putData(data);//receive data,length:4 <Buffer 00 02 66 66>
-console.log('Log:传入两个包,分两次Put[验证分两次Put数据包]');
+// console.log('Log:传入两个包,分两次Put[验证分两次Put数据包]');
 stick.putData(data2_1);
 stick.putData(data2_2);// receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 

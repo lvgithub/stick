@@ -1,5 +1,5 @@
 const net = require('net')
-const stick_package = require('../index')
+const stick_package = require('../../index').stick
 
 const tcp_server = net.createServer(function (socket) {
     socket.stick = new stick_package(1024).setReadIntBE('32')
