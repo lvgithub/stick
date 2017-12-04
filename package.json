@@ -17,7 +17,7 @@
     "粘包",
     "缓存"
   ],
-  "author": "刘威",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/lvgithub/stickPackage/issues"
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/lvgithub/stickPackage#readme",
   "dependencies": {
     "assert": "^1.4.1",
+    "assert-plus": "^1.0.0",
     "nrm": "^1.0.2"
   }
 }

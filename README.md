@@ -83,28 +83,31 @@ npm i stickpackage
 ---
 
 ## 使用方法
-* 发送字符串消息
+* 服务端处理粘包
 ```
+    // 默认client.js 采用 msgCenter.publish('...') 向服务端发消息
+    // 以下是服务端收到消息后，进行粘包处理
     const MsgCenter = require('stickpackage').msgCenter
     const msgCenter = new MsgCenter()
 
-    // 监听分包后的消息
+    // server 监听分包后的消息
     msgCenter.onMsgRecv(data => {
         console.log(`recv data: ` + data.toString())
     })
-    // 向队列中推送消息
-    msgCenter.putMsg('234')
-    //=> recv data: 234
 
-    // 连续发送两个包
+    // 把 tcp server 监听到的字节流，put到msgCenter中
     //msgCenter.putData(Buffer.from([0x00, 0x02, 0x31, 0x32, 0x00, 0x04, 0x31, 0x32, 0x33, 0x34]))
     //=> recv data: 12
     //=> recv data: 1234
+
 ```
 ---
 
 * 发送二进制数据
 ```
+    // 默认client.js 采用 stick 配置的组包式向服务器发送消息
+    // 以下是服务端收到消息后，进行粘包处理
+
     const Stick = require('stickpackage').stick;
     const stick = new Stick(1024).setReadIntBE('16')
 
@@ -143,37 +146,27 @@ npm i stickpackage
 * tcp client和tcp server 之间通过stick进行粘包处理通信,详细内容见example文件夹
 * [tcp-msg]本demo主要演示TCP中处理粘包的方法，不需要自己组装包头，直接发送和接收文本消息，组包解包操作本类库已经封装在底层
 ```
-    // Client.js
+// Client.js
     const net = require('net')
     const stick = require('../../index')
+    const msgCenter = new stick.msgCenter()
 
-    const tcp_server = net.createServer(function (socket) {
-        const msgCenter = new stick.msgCenter()
+    const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function () {
 
-        socket.on('data', function (data) {
-            msgCenter.putData(data)
-        })
+    const msgBuffer = msgCenter.publish('username=123&password=1234567,qwe')
 
-        msgCenter.onMsgRecv(function (data) {
-            console.log('recv data: ' + data.toString())
-        })
+    client.write(msgBuffer)
 
-        socket.on('close', function (error) {
-            console.log('client disconnected')
-        })
+})
 
-        socket.on('error', function (error) {
-            console.log(`error:客户端异常断开: ${error}`)
-        })
+    client.on('data', function (data) {
+        console.log(data.toString())
     })
-
-    tcp_server.on('error', function (err) {
-        throw err
+    client.on('end', function () {
+        console.log('disconnect from server')
     })
-    tcp_server.listen(8080, function () {
-        console.log('tcp_server listening on 8080')
-    })
-
+```
+```
 // Server.js
     const net = require('net')
     const stick = require('../../index')
@@ -232,7 +225,8 @@ npm i stickpackage
     client.on('end', function () {
         console.log('disconnect from server')
     })
-
+```
+```
 // Server.js
     const net = require('net')
     const stick_package = require('../../index').stick
