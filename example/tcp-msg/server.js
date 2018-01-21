@@ -1,30 +1,21 @@
-const net = require('net')
-const stick = require('../../index')
+'use strict'
+
+const net = require('net');
+const stick = require('../../index');
 
 const tcp_server = net.createServer(function (socket) {
 
-    const msgCenter = new stick.msgCenter()
+    const msgCenter = new stick.msgCenter();
 
-    socket.on('data', function (data) {
-        msgCenter.putData(data)
-    })
+    socket.on('data', data => msgCenter.putData(data));
+    socket.on('close', () => console.log('client disconnected'));
+    socket.on('error', error => console.log(`error:客户端异常断开: ${error}`));
 
-    msgCenter.onMsgRecv(function (data) {
-        console.log('recv data: ' + data.toString())
-    })
-
-    socket.on('close', function (error) {
-        console.log('client disconnected')
-    })
-
-    socket.on('error', function (error) {
-        console.log(`error:客户端异常断开: ${error}`)
-    })
+    msgCenter.onMsgRecv(data => console.log('recv data: ' + data.toString()));
 })
 
-tcp_server.on('error', function (err) {
-    throw err
-})
-tcp_server.listen(8080, function () {
-    console.log('tcp_server listening on 8080')
-})
+
+tcp_server.on('error', err => console.log(err));
+tcp_server.listen(8080, () => console.log('tcp_server listening on 8080'));
+
+
