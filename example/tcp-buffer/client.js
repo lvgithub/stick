@@ -1,3 +1,5 @@
+'use strict'
+
 const net = require('net')
 
 const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function () {
@@ -12,6 +14,7 @@ const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function 
     client.write(headBuf)
     // 发送包内容
     client.write(body)
+
     console.log('data body: ' + body.toString())
 
 })

@@ -1,3 +1,5 @@
+'use strict'
+
 const Stick = require('../index').stick;
 const stick = new Stick(1024).setReadIntBE('16')
 

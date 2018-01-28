@@ -1,3 +1,4 @@
+'use strict'
 
 const MsgCenter = require('../index').msgCenter
 const msgCenter = new MsgCenter()

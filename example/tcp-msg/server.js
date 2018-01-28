@@ -4,7 +4,6 @@ const net = require('net');
 const stick = require('../../index');
 
 const tcp_server = net.createServer(function (socket) {
-
     const msgCenter = new stick.msgCenter();
 
     socket.on('data', data => msgCenter.putData(data));
