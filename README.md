@@ -1,13 +1,14 @@
-#Stickpackage
+#Stick
 
-##  StickPackage，NodeJs中TCP粘包、分包解决方案！
+## Node.Js中TCP粘包、分包解决方案！
 
-[持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
+[持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
 
 ---
 
 ## 目录
 * 安装
+* 项目特点
 * 配置介绍
 * API
 * 更新记录
@@ -20,6 +21,11 @@
 ```
 npm i stickpackage
 ```
+
+---
+## 项目特点： 
+* 低内存占用，采用循环队列数据结构，进行解包处理，队列内存用户依据报文大小进行配置。
+* 高并发，目前线上业务每秒1500个数据包，每个数据包300字节，内存稳定30M以内，单核cpu稳定40%以内 
 
 ---
 
@@ -292,4 +298,4 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stickPackage.git)
+## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
