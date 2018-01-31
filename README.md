@@ -3,7 +3,7 @@
 ## The solution of sticky package problem of TCP for Node.Js !
 
 [If you like, you can subscribe to start or watch](https://github.com/lvgithub/stick)
-
+[中文文档](https://github.com/lvgithub/stick/tree/master/example)
 ---
 
 ## Table of Contents
