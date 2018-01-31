@@ -1,78 +1,78 @@
 # Stick
 
-## The solution of sticky package problem of TCP for Node.Js !
+## Node.Js中TCP粘包、分包解决方案！
 
-[If you like, you can subscribe to start or watch](https://github.com/lvgithub/stick)
-
----
-
-## Table of Contents
-* Install
-* Characteristics
-* Configure
-* APIs
-* Changelog
-* Usage
-* Examples
+[持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
 
 ---
 
-## Install
+## 目录
+* 安装
+* 项目特点
+* 配置介绍
+* API
+* 更新记录
+* 使用方法
+* 案例演示
+
+---
+
+## 安装
 ```
 npm i stickpackage
 ```
 
 ---
-## Trait
-* low memory, using circular queue data structure, unpack, queue memory according to user packet size configuration。
-* high concurrency, 1500 packets per second at present, 300 bytes per packet, less than 30M in memory, and less than 40% for single core CPU 
+## 项目特点： 
+* 低内存占用，采用循环队列数据结构，进行解包处理，队列内存用户依据报文大小进行配置。
+* 高并发，目前线上业务每秒1500个数据包，每个数据包300字节，内存稳定30M以内，单核cpu稳定40%以内 
 
 ---
 
-## Configuration
+## 配置介绍
 
-* [x] Provide solutions for TCP sticky processing
-* [x] The default buffer is 512 bytes, and when the data is over 512 bytes, the buffer space is automatically expanded with a 512 multiple
-* [x] By default, two bytes in Baotou are used to represent the packet length
-* [x] The main connection mode to receive data by default
-* [x] You can configure the big end of the small end of reading
-* [x] You can configure custom Baotou length
-* [x] Support automatic disassembly package
+* [x] 提供对TCP粘包处理的解决方案
+* [x] 默认缓冲512个字节，当接收数据超过512字节，自动以512倍数扩大缓冲空间
+* [x] 本默认采用包头两个字节表示包长度
+* [x] 默认采用大端接模式接收数据
+* [x] 可以配置大端小端读取
+* [x] 可以配置自定义包头长度
+* [x] 支持自动拆解包
 
 ---
 
 ## API
-* stick(bufferSize) => Processing bytes type packages
+* stick(bufferSize) => 直接处理字节类型的包
 ```
-    bufferSize: Setting the size of the cache space
+    bufferSize:设置stick处理粘包的缓存空间
 ```
-* stick.setReadIntBE(type) => In big endian mode is set to the maximum packet size on the basis of "choose the right type
+* stick.setReadIntBE(type) => 设置为大端模式<依据数据包最大值选择合适type>
 ```
-    setReadIntBE(type)  type:16  short(len:2)
-    setReadIntBE(type)  type:32  int(len:4)
+    setReadIntBE(type)  type:16  包头长度为2,short类型
+    setReadIntBE(type)  type:32  包头长度为4,int类型
 ```
-* stick.setReadIntLE => In small endian mode is set to the maximum packet size on the basis of "choose the right type
+* stick.setReadIntLE => 设置为小端模式<依据数据包最大值选择合适type>
 ```
-    setReadIntLE(type)  type:16  short(len:2)
-    setReadIntLE(type)  type:32  int(len:4)
+    setReadIntLE(type)  type:16  包头长度为2,short类型
+    setReadIntLE(type)  type:32  包头长度为4,int类型
 ```
-* stick.putData(buffer) => Put data to stick
-* stick.onData(buffer) => Get the all data
-* msgCenter(options) => Processing string type packages
+* stick.putData(buffer) => 向stick中推送需要处理粘包的字节流
+* stick.onData(buffer) => 监听stick解包好的一个个完整消息(包头+包体),用户自己的数据存储在包体中，如果不想处理包头用msgCenter已经封装好
+* msgCenter(options) => 可直接发送字符串消息,基于stick封装，屏蔽stick层需要自己组装包头和拆包头的步骤
 ```
-    options.bufferSize: Setting the size of the cache space
-    options.type：Set header length (16|32)
-    options.bigEndian: The default buffer is false
+    options.bufferSize: 设置用户处理粘包的缓存空间
+    options.type：设置包头为16位或者32位模式(16|32)
+    options.bigEndian: 设置大端、小端字节流模式,默认为打断模式,为false时为小端模式(true|false)
 ```
-* msgCenter.putMsg(msg) => Put msg data to stick
-* msgCenter.publish(msg) => Send a msg 
+* msgCenter.putMsg(msg) => 向消息中心推送字符串消息
+* msgCenter.publish(msg) => 发布一个消息,返回一个被打包好的buffer(包头+包体),用户clent发包时使用
 ```
     msgCenter.publish('123') 
-    => <Buffer 00 03 31 32 33> // 00 03 (data len)  31 32 33 (123)
+    => <Buffer 00 03 31 32 33> // 00 03 包长度  31 32 33 字符串123的ascii码
 ```
-* msgCenter.onMsgRecv(msgHandleFun) => Get all data
+* msgCenter.onMsgRecv(msgHandleFun) => 处理经过粘包处理后的消息
 ```
-    msgHandleFun:
+    msgHandleFun:业务上处理消息的函数
     msgCenter.onMsgRecv(msg => {
         console.log(`recv data: ` + msg.toString())
         ...do something
@@ -81,23 +81,27 @@ npm i stickpackage
 
 ---
 
-## Updates:
+## 更新记录:
 
-* Add endian mode config,setReadIntBE,setReadIntLE
-* Add send string msg
+* 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法
+* 支持直接发送字符串消息,自动化组装包头
 
 ---
 
-## Usage
-*  stick data
+## 使用方法
+* 服务端处理粘包
 ```
+    // 默认client.js 采用 msgCenter.publish('...') 向服务端发消息
+    // 以下是服务端收到消息后，进行粘包处理
     const MsgCenter = require('stickpackage').msgCenter
     const msgCenter = new MsgCenter()
 
+    // server 监听分包后的消息
     msgCenter.onMsgRecv(data => {
         console.log(`recv data: ` + data.toString())
     })
 
+    // 把 tcp server 监听到的字节流，put到msgCenter中
     msgCenter.putData(Buffer.from([0x00, 0x02, 0x31, 0x32, 0x00, 0x04, 0x31, 0x32, 0x33, 0x34]))
     //=> recv data: 12
     //=> recv data: 1234
@@ -105,20 +109,29 @@ npm i stickpackage
 ```
 ---
 
-* send buffer data
+* 发送二进制数据
 ```
+    // 默认client.js 采用 stick 配置的组包式向服务器发送消息
+    // 以下是服务端收到消息后，进行粘包处理
+
     const Stick = require('stickpackage').stick;
     const stick = new Stick(1024).setReadIntBE('16')
 
     /*
-    *  data1:[0x00, 0x02, 0x66, 0x66]
-    *  data2:[0x00, 0x04, 0x88, 0x02, 0x11, 0x11]
+    *  包含两个数据包,10个字节,包头为short，两个字节：[0x00, 0x02],[ 0x00, 0x04]
+    *  数据包1:[0x00, 0x02, 0x66, 0x66]
+    *  数据包2:[0x00, 0x04, 0x88, 0x02, 0x11, 0x11]
     */
     const data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
 
+    /*  构造两个buffer
+    *   data2_1包含:  第一个数据包的全部数据,第二个数据包的部分数据	
+    *   data2_2包含:  第二个数据包的剩余数据
+    */
     const data2_1 = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11]);
     const data2_2 = Buffer.from([0x11]);
 
+    // 设置收到完整数据触发器
     stick.onData(function (data) {
         console.log('receive data,length:' + data.length);
         console.log(data)
@@ -128,15 +141,16 @@ npm i stickpackage
     stick.putData(data2_1);
     stick.putData(data2_2);  
 
-    //  result：   
+    //  运行结果：   
     //  receive data,length:4 <Buffer 00 02 66 66>  
     //  receive data,length:6 <Buffer 00 04 88 02 11 11>
     //  receive data,length:2 <Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 ```
 ---
 
-## Demo（See the example folder）
-* tcp-msg
+## 案例演示
+* tcp client和tcp server 之间通过stick进行粘包处理通信,详细内容见example文件夹
+* [tcp-msg]本demo主要演示TCP中处理粘包的方法，不需要自己组装包头，直接发送和接收文本消息，组包解包操作本类库已经封装在底层
 ```
 // Client.js
     const net = require('net')
@@ -179,7 +193,7 @@ npm i stickpackage
         })
 
         socket.on('error', function (error) {
-            console.log(`error: ${error}`)
+            console.log(`error:客户端异常断开: ${error}`)
         })
     })
 
@@ -190,7 +204,7 @@ npm i stickpackage
         console.log('tcp_server listening on 8080')
     })
 ```
-* tcp-buffer
+* [tcp-buffer]本demo主要演示TCP中直接处理字节流粘包，展示出如何自己组装包头包体和解包,如不向自己进行组装包头解包操作，请看demo tcp-msg
 ```
 // Clinet.js
     const net = require('net')
@@ -198,14 +212,17 @@ npm i stickpackage
     const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function () {
         const body = Buffer.from('username=123&password=1234567,qwe')
 
+        // 写入包头
         const headBuf = new Buffer(4)
         headBuf.writeUInt32BE(body.byteLength, 0)
         console.log('data length: ' + headBuf.readInt32BE())
 
+        // 发送包头
         client.write(headBuf)
+        // 发送包内容
         client.write(body)
-
         console.log('data body: ' + body.toString())
+
     })
 
     client.on('data', function (data) {
@@ -227,10 +244,11 @@ npm i stickpackage
         })
 
         socket.stick.onData(function (data) {
-
+            // 解析包头长度
             const head = new Buffer(4)
             data.copy(head, 0, 0, 4)
 
+            // 解析数据包内容
             const body = new Buffer(head.readInt32BE())
             data.copy(body, 0, 4, head.readInt32BE())
 
@@ -243,7 +261,7 @@ npm i stickpackage
         })
 
         socket.on('error', function (error) {
-            console.log(`error: ${error}`)
+            console.log(`error:客户端异常断开: ${error}`)
         })
     })
 
@@ -255,9 +273,11 @@ npm i stickpackage
     })
 ```
 ---
-
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2017-present, ximen (G.doe) 
+```
+
+## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
