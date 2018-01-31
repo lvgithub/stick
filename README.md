@@ -3,7 +3,9 @@
 ## The solution of sticky package problem of TCP for Node.Js !
 
 [If you like, you can subscribe to start or watch](https://github.com/lvgithub/stick)
-[中文文档](https://github.com/lvgithub/stick/tree/master/example)
+
+[中文文档](https://github.com/lvgithub/stick/blob/master/README.ZH.md)
+
 ---
 
 ## Table of Contents
@@ -135,7 +137,7 @@ npm i stickpackage
 ```
 ---
 
-## Demo（See the example folder）
+## Demo（[See the example folder](https://github.com/lvgithub/stick/tree/master/example)）
 * tcp-msg
 ```
 // Client.js
