@@ -140,22 +140,23 @@ npm i stickpackage
 ## Demo（[See the example folder](https://github.com/lvgithub/stick/tree/master/example)）
 * tcp-msg
 ```
-// Client.js
+    // Client.js
     const net = require('net')
     const stick = require('../../index')
     const msgCenter = new stick.msgCenter()
 
-    const client = net.createConnection({ port: 8080, host: '127.0.0.1' }, function () {
-
-    const msgBuffer = msgCenter.publish('username=123&password=1234567,qwe')
-
-    client.write(msgBuffer)
-
-})
+    const client = net.createConnection({
+         port: 8080, 
+         host: '127.0.0.1'
+    }, function () {
+        const msgBuffer = msgCenter.publish('username=123&password=1234567,qwe')
+        client.write(msgBuffer)
+    })
 
     client.on('data', function (data) {
         console.log(data.toString())
     })
+
     client.on('end', function () {
         console.log('disconnect from server')
     })
@@ -188,6 +189,7 @@ npm i stickpackage
     tcp_server.on('error', function (err) {
         throw err
     })
+
     tcp_server.listen(8080, function () {
         console.log('tcp_server listening on 8080')
     })
@@ -213,12 +215,13 @@ npm i stickpackage
     client.on('data', function (data) {
         console.log(data.toString())
     })
+
     client.on('end', function () {
         console.log('disconnect from server')
     })
 ```
 ```
-// Server.js
+    // Server.js
     const net = require('net')
     const stick_package = require('../../index').stick
 
@@ -252,6 +255,7 @@ npm i stickpackage
     tcp_server.on('error', function (err) {
         throw err
     })
+    
     tcp_server.listen(8080, function () {
         console.log('tcp_server listening on 8080')
     })
