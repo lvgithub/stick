@@ -83,7 +83,7 @@ npm i stickpackage
 
 ---
 
-## Updates:
+## Updates
 
 * Add endian mode config,setReadIntBE,setReadIntLE
 * Add send string msg
