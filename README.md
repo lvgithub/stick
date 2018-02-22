@@ -35,10 +35,10 @@ npm i stickpackage
 
 * [x] Provide solutions for TCP sticky processing
 * [x] The default buffer is 512 bytes, and when the data is over 512 bytes, the buffer space is automatically expanded with a 512 multiple
-* [x] By default, two bytes in Baotou are used to represent the packet length
+* [x] By default, two bytes in package header are used to represent the packet length
 * [x] The main connection mode to receive data by default
 * [x] You can configure the big end of the small end of reading
-* [x] You can configure custom Baotou length
+* [x] You can configure custom package header length
 * [x] Support automatic disassembly package
 
 ---
