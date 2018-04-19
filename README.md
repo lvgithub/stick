@@ -4,7 +4,7 @@
 
 [If you like, you can subscribe to start or watch](https://github.com/lvgithub/stick)
 
-[中文文档](https://github.com/lvgithub/stick/blob/master/README.ZH.md)
+[中文文档](https://github.com/lvgithub/stick/blob/master/README_ZH.md)
 
 ---
 
