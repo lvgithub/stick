@@ -40,6 +40,7 @@ npm i stickpackage
 * [x] You can configure the big end of the small end of reading
 * [x] You can configure custom package header length
 * [x] Support automatic disassembly package
+* Dealing with back pressure
 
 ---
 
