@@ -44,6 +44,22 @@ npm i stickpackage
 
 ---
 
+## Run the demo
+```
+    git clone https://github.com/lvgithub/stick.git
+    npm install
+
+    cd example/tcp-buffer/
+
+    #in terminal:
+    node server.js
+
+    #in other terminal:
+    node client.js
+
+    #then client will connect to the server and sending data to each other
+```
+
 ## API
 * stick(bufferSize) => Processing bytes type packages
 ```
