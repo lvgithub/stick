@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const net = require('net');
 const stick = require('../../index');
@@ -11,7 +11,7 @@ const tcp_server = net.createServer(function (socket) {
     socket.on('error', error => console.log(`error:客户端异常断开: ${error}`));
 
     msgCenter.onMsgRecv(data => console.log('recv data: ' + data.toString()));
-})
+});
 
 
 tcp_server.on('error', err => console.log(err));
