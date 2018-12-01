@@ -22,11 +22,11 @@ const tcp_server = net.createServer(function (socket) {
         console.log('body content: ' + body.toString());
     });
 
-    socket.on('close', function (error) {
+    socket.on('close', () => {
         console.log('client disconnected');
     });
 
-    socket.on('error', function (error) {
+    socket.on('error', error => {
         console.log(`error:客户端异常断开: ${error}`);
     });
 });

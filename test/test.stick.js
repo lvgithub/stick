@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 const Stick = require('../index').stick;
-const stick = new Stick(1024).setReadIntBE('16')
+const stick = new Stick(1024).setReadIntBE('16');
 
 //  构造一个buffer,包含两个数据包，10个字节
 const data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
@@ -19,7 +19,7 @@ const data2_2 = Buffer.from([0x11]);
 // // 设置收到完整数据触发器
 stick.onData(function (data) {
     console.log('receive data,length:' + data.length);
-    console.log(data)
+    console.log(data);
 });
 
 // console.log('Log:传入两个包,一次Put[验证一次性Put数据包]');
