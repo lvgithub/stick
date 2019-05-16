@@ -1,6 +1,6 @@
 {
   "name": "stickpackage",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "The solution of sticky package problem of TCP for Node.Js !",
   "main": "stickPackage.js",
   "scripts": {
