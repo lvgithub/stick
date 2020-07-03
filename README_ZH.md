@@ -1,10 +1,50 @@
-# Stick
+## 背景
+由于TCP协议是面向流的协议，我们使用TCP通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个T粘包处理方案。[喜欢的话star，想订阅点watch~](https://github.com/lvgithub/stick)
 
-## Node.Js中TCP粘包、分包解决方案！
+## 原理
+对要发送的数据进行协议编码，把一份数据分为 `header` + `data `两个结构，header默认固定长度（*2 byte*），`header`的内容描述的是 `data` 数据的长度。由于`header`定长，因此可以通过解析`header`，来动态解析 `data` 的内容。
 
-[持续更新，源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
+![image-20200703200909697](assets/README_ZH/image-20200703200909697.png)
 
----
+如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02 `转化为整数的长度是2，因为我们再读取出流的第三、四位  `0x61, 0x62`, 这个是真实数据，通过ASCII码对照表我们知道内容为 `ab`。我们通过如下例子验证下：
+
+```javascript
+// test.pack.js
+'use strict';
+const Stick = require('../index').stick;
+const stick = new Stick(1024).setReadIntBE('16');
+
+// 初始化header内存
+const headerBuf = Buffer.alloc(2);
+// 初始化数据  <Buffer 61 62>
+const dataBuf = Buffer.from('ab');
+// 写入数据长度 <Buffer 00 02>
+headerBuf.writeInt16BE(dataBuf.length, 0);
+
+console.log('header:', headerBuf);
+console.log('dataBuf:',dataBuf);
+// <Buffer 00 02 61 62>
+const buffer = Buffer.concat([headerBuf,dataBuf]);
+console.log('buffer:', buffer);
+
+stick.onData(function (data) {
+    console.log('data:',data.toString());
+});
+stick.putData(buffer);
+
+```
+
+Output:
+
+```shell
+$ node test.pack.js
+header: <Buffer 00 02>
+dataBuf: <Buffer 61 62>
+buffer: <Buffer 00 02 61 62>
+data: ab
+```
+
+完全符合预期的解析出了内容 `ab`,buffer 内容也符合上图中的规则
 
 ## 目录
 * 安装
@@ -281,3 +321,5 @@ Copyright (c) 2017-present, ximen (G.doe)
 ```
 
 ## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
+
+```

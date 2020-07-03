@@ -4,7 +4,7 @@ const Stick = require('../index').stick;
 const stick = new Stick(1024).setReadIntBE('16');
 
 //  构造一个buffer,包含两个数据包，10个字节
-const data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
+const data = Buffer.from([0x00, 0x02, 0x61, 0x62, 0x00, 0x04, 0x65, 0x6, 0x66, 0x66]);
 
 /*  构造两个buffer
 *   data2_1包含:
@@ -13,20 +13,23 @@ const data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 
 *   data2_2包含:
 *  	第二个数据包的剩余数据
 */
-const data2_1 = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11]);
-const data2_2 = Buffer.from([0x11]);
+// const data2_1 = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11]);
+// const data2_2 = Buffer.from([0x11]);
 
 // // 设置收到完整数据触发器
 stick.onData(function (data) {
     console.log('receive data,length:' + data.length);
-    console.log(data);
+    console.log(data.toString());
 });
+const buf = new Buffer(2);
+buf.writeInt16BE(2, 0);
 
+console.log('buf',buf);
 // console.log('Log:传入两个包,一次Put[验证一次性Put数据包]');
 stick.putData(data);//receive data,length:4 <Buffer 00 02 66 66>
 // console.log('Log:传入两个包,分两次Put[验证分两次Put数据包]');
-stick.putData(data2_1);
-stick.putData(data2_2);// receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
+// stick.putData(data2_1);
+// stick.putData(data2_2);// receive data, length:2< Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 
 
 // // 构造一个512个字节长度的数据。用来测试缓存满的情况
