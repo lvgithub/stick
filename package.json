@@ -17,8 +17,8 @@
     "粘包",
     "缓存"
   ],
-  "author": "",
-  "license": "MITu",
+  "author": "liuwei",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lvgithub/stickPackage/issues"
   },
