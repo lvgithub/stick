@@ -1,5 +1,5 @@
 ## 背景
-由于TCP协议是面向流的协议，我们使用TCP通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个T粘包处理方案。[喜欢的话star，想订阅点watch~](https://github.com/lvgithub/stick)
+由于TCP协议是面向流的协议，我们使用TCP通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个粘包处理方案。[喜欢的话star，想订阅点watch~](https://github.com/lvgithub/stick)
 
 ## 原理
 对要发送的数据进行协议编码，把一份数据分为 `header` + `data `两个结构，header默认固定长度（*2 byte*），`header`的内容描述的是 `data` 数据的长度。由于`header`定长，因此可以通过解析`header`，来动态解析 `data` 的内容。

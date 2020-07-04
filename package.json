@@ -1,17 +1,16 @@
 {
-  "name": "stickpackage",
-  "version": "3.1.2",
+  "name": "@lvgithub/stick",
+  "version": "3.1.4",
   "description": "The solution of sticky package problem of TCP for Node.Js !",
-  "main": "stickPackage.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lvgithub/stickPackage.git"
-  },
+  "repository": "https://github.com/lvgithub/stick.git",
   "keywords": [
-    "stickPackage",
+    "stick",
+    "stick package",
+    "stick data",
     "tcp",
     "node",
     "粘包",
@@ -20,7 +19,7 @@
   "author": "liuwei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lvgithub/stickPackage/issues"
+    "url": "https://github.com/lvgithub/stick/issues"
   },
-  "homepage": "https://github.com/lvgithub/stickPackage#readme"
+  "homepage": "https://github.com/lvgithub/stick#readme"
 }
