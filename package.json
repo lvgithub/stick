@@ -4,7 +4,7 @@
   "description": "The solution of sticky package problem of TCP for Node.Js !",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": "https://github.com/lvgithub/stick.git",
   "keywords": [
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/lvgithub/stick/issues"
   },
-  "homepage": "https://github.com/lvgithub/stick#readme"
+  "homepage": "https://github.com/lvgithub/stick#readme",
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
 }

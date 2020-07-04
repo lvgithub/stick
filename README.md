@@ -2,14 +2,13 @@
 由于TCP协议是面向流的协议，我们使用TCP通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个粘包处理方案。[喜欢的话star，想订阅点watch~](https://github.com/lvgithub/stick)
 
 ## 原理
-对要发送的数据进行协议编码，把一份数据分为 `header` + `data `两个结构，header默认固定长度（*2 byte*），`header`的内容描述的是 `data` 数据的长度。由于`header`定长，因此可以通过解析`header`，来动态解析 `data` 的内容。
+对要发送的数据进行协议编码，把一份数据`data`分为 `header` +` body`两个结构，header默认固定长度（*2 byte*），`header`的内容描述的是 `body` 数据的长度。由于`header`定长，因此可以通过解析`header`，动态解析 `body` 的内容。
 
-![image-20200703200909697](assets/README_ZH/image-20200703200909697.png)
+![image-20200704170816148](assets/README/image-20200704170816148.png)
 
 如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02 `转化为整数的长度是2，因为我们再读取出流的第三、四位  `0x61, 0x62`, 这个是真实数据，通过ASCII码对照表我们知道内容为 `ab`。我们通过如下例子验证下：
 
 ```javascript
-// test.pack.js
 'use strict';
 const Stick = require('../index').stick;
 const stick = new Stick(1024).setReadIntBE('16');
@@ -27,9 +26,20 @@ console.log('dataBuf:',dataBuf);
 const buffer = Buffer.concat([headerBuf,dataBuf]);
 console.log('buffer:', buffer);
 
+// 返回 data(header+body) 数据
 stick.onData(function (data) {
-    console.log('data:',data.toString());
+    // data: <Buffer 00 02 61 62>
+    console.log('data:',data);
 });
+
+// 只返回 body 部分数据
+stick.onBody(function (body) {
+    // body: <Buffer 61 62>
+    console.log('body:', body);
+    // body str: ab
+    console.log('body str:',body.toString());
+});
+
 stick.putData(buffer);
 
 ```
@@ -37,11 +47,13 @@ stick.putData(buffer);
 Output:
 
 ```shell
-$ node test.pack.js
+$ node pack.js
 header: <Buffer 00 02>
 dataBuf: <Buffer 61 62>
 buffer: <Buffer 00 02 61 62>
-data: ab
+data: <Buffer 00 02 61 62>
+body: <Buffer 61 62>
+body str: ab
 ```
 
 完全符合预期的解析出了内容 `ab`, buffer的内容也符合上图中的规则
