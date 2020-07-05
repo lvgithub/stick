@@ -14,7 +14,8 @@
 //example/sample.js
 'use strict';
 const Stick = require('../index').stick;
-const stick = new Stick(1024).setReadIntBE('16');
+const stick = new Stick(1024);
+stick.setHeaderLength(4);
 const log = (...info) => console.log(new Date(), '', ...info);
 
 stick.onBody(function (body) {
@@ -36,7 +37,33 @@ $ node example/sample.js
 2020-07-05T02:26:45.104Z  body: {"name":"liuwei","isVip":true}
 ```
 
-完全符合预期的解析出了内容 `ab`, buffer 的内容也符合上图中的规则
+实际应用场景
+
+```javascript
+//example/tcpSample.js
+'use strict';
+const net = require('net');
+const stick_package = require('../index').stick;
+const stick = new stick_package(1024);
+stick.setHeaderLength(4);
+
+// server端
+const server = net.createServer(socket => {
+    socket.on('data', data => stick.putData(data));
+    stick.onBody(body => console.log('body:', body.toString()));
+    server.close();
+});
+server.listen(8080);
+
+// client 端
+const client = net.createConnection({ port: 8080, host: 'localhost' }, () => {
+    const data = stick.makeData(JSON.stringify({ userName: 'liuwei' }));
+    client.write(data);
+    client.destroy();
+});
+```
+
+
 
 ## 安装
 

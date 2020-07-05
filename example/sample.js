@@ -1,7 +1,7 @@
 // example/sample.js
 'use strict';
 const Stick = require('../index').stick;
-const stick = new Stick(1024).setReadIntBE('16');
+const stick = new Stick(1024).setHeaderLength(4);
 const log = (...info) => console.log(new Date(), '', ...info);
 
 stick.onBody(function (body) {
