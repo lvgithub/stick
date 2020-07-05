@@ -1,109 +1,103 @@
 ## 背景
-由于TCP协议是面向流的协议，我们使用TCP通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个粘包处理方案。[喜欢的话star，想订阅点watch~](https://github.com/lvgithub/stick)
+
+由于 TCP 协议是面向流的协议，我们使用 TCP 通信的时候，需要解析出我们的数据，就需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个粘包处理方案。[喜欢的话 star，想订阅点 watch~](https://github.com/lvgithub/stick)
 
 ## 原理
-对要发送的数据进行协议编码，把一份数据`data`分为 `header` +` body`两个结构，header默认固定长度（*2 byte*），`header`的内容描述的是 `body` 数据的长度。由于`header`定长，因此可以通过解析`header`，动态解析 `body` 的内容。
+
+对要发送的数据进行协议编码，把一份数据`data`分为 `header` +`body`两个结构，header 默认固定长度（_2 byte_），`header`的内容描述的是 `body` 数据的长度。由于`header`定长，因此可以通过解析`header`，动态解析 `body` 的内容。
 
 ![image-20200704170816148](assets/README/image-20200704170816148.png)
 
-如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02 `转化为整数的长度是2，因为我们再读取出流的第三、四位  `0x61, 0x62`, 这个是真实数据，通过ASCII码对照表我们知道内容为 `ab`。我们通过如下例子验证下：
+如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02`转化为整数的长度是 2，因为我们再读取出流的第三、四位 `0x61, 0x62`, 这个是真实数据,我们通过如下例子验证下：
 
 ```javascript
+//example/sample.js
 'use strict';
 const Stick = require('../index').stick;
 const stick = new Stick(1024).setReadIntBE('16');
+const log = (...info) => console.log(new Date(), '', ...info);
 
-// 初始化header内存
-const headerBuf = Buffer.alloc(2);
-// 初始化数据  <Buffer 61 62>
-const dataBuf = Buffer.from('ab');
-// 写入数据长度 <Buffer 00 02>
-headerBuf.writeInt16BE(dataBuf.length, 0);
-
-console.log('header:', headerBuf);
-console.log('dataBuf:',dataBuf);
-// <Buffer 00 02 61 62>
-const buffer = Buffer.concat([headerBuf,dataBuf]);
-console.log('buffer:', buffer);
-
-// 返回 data(header+body) 数据
-stick.onData(function (data) {
-    // data: <Buffer 00 02 61 62>
-    console.log('data:',data);
-});
-
-// 只返回 body 部分数据
 stick.onBody(function (body) {
-    // body: <Buffer 61 62>
-    console.log('body:', body);
-    // body str: ab
-    console.log('body str:',body.toString());
+    log('body:', body.toString());
 });
 
-stick.putData(buffer);
+const user = { name: 'liuwei', isVip: true };
+const data = stick.makeData(JSON.stringify(user));
 
+// 在真实的应用场景中这部分代码在客户端中通过TCP 发送给服务端
+// 服务端把接受到的 data,通过 putData 把数据放入 stick
+stick.putData(data);
 ```
 
 Output:
 
 ```shell
-$ node pack.js
-header: <Buffer 00 02>
-dataBuf: <Buffer 61 62>
-buffer: <Buffer 00 02 61 62>
-data: <Buffer 00 02 61 62>
-body: <Buffer 61 62>
-body str: ab
+$ node example/sample.js
+2020-07-05T02:26:45.104Z  body: {"name":"liuwei","isVip":true}
 ```
 
-完全符合预期的解析出了内容 `ab`, buffer的内容也符合上图中的规则
+完全符合预期的解析出了内容 `ab`, buffer 的内容也符合上图中的规则
 
 ## 安装
+
 ```shell
-npm i stickpackage --save
+npm i @lvgithub/stick
 ```
 
 ## 功能介绍
 
-* [x] 提供对TCP粘包处理的解决方案
-* [x] 默认缓冲512个字节，当接收数据超过512字节，自动以512倍数扩大缓冲空间
-* [x] 本默认采用包头两个字节表示包长度
-* [x] 默认采用大端接模式接收数据
-* [x] 可以配置大端小端读取
-* [x] 可以配置自定义包头长度
-* [x] 支持自动拆解包
+- [x] 提供对 TCP 粘包处理的解决方案
+- [x] 默认缓冲 512 个字节，当接收数据超过 512 字节，自动以 512 倍数扩大缓冲空间
+- [x] 本默认采用包头两个字节表示包长度
+- [x] 默认采用大端接模式接收数据
+- [x] 可以配置大端小端读取
+- [x] 可以配置自定义包头长度
+- [x] 支持自动拆解包
+
 ---
 
 ## API
-* stick(bufferSize) => 直接处理字节类型的包
+
+- stick(bufferSize) => 直接处理字节类型的包
+
 ```
     bufferSize:设置stick处理粘包的缓存空间
 ```
-* stick.setReadIntBE(type) => 设置为大端模式<依据数据包最大值选择合适type>
+
+- stick.setReadIntBE(type) => 设置为大端模式<依据数据包最大值选择合适 type>
+
 ```
     setReadIntBE(type)  type:16  包头长度为2,short类型
     setReadIntBE(type)  type:32  包头长度为4,int类型
 ```
-* stick.setReadIntLE => 设置为小端模式<依据数据包最大值选择合适type>
+
+- stick.setReadIntLE => 设置为小端模式<依据数据包最大值选择合适 type>
+
 ```
     setReadIntLE(type)  type:16  包头长度为2,short类型
     setReadIntLE(type)  type:32  包头长度为4,int类型
 ```
-* stick.putData(buffer) => 向stick中推送需要处理粘包的字节流
-* stick.onData(buffer) => 监听stick解包好的一个个完整消息(包头+包体),用户自己的数据存储在包体中，如果不想处理包头用msgCenter已经封装好
-* msgCenter(options) => 可直接发送字符串消息,基于stick封装，屏蔽stick层需要自己组装包头和拆包头的步骤
+
+- stick.putData(buffer) => 向 stick 中推送需要处理粘包的字节流
+- stick.onData(buffer) => 监听 stick 解包好的一个个完整消息(包头+包体),用户自己的数据存储在包体中，如果不想处理包头用 msgCenter 已经封装好
+- msgCenter(options) => 可直接发送字符串消息,基于 stick 封装，屏蔽 stick 层需要自己组装包头和拆包头的步骤
+
 ```
     options.bufferSize: 设置用户处理粘包的缓存空间
     options.type：设置包头为16位或者32位模式(16|32)
     options.bigEndian: 设置大端、小端字节流模式,默认为打断模式,为false时为小端模式(true|false)
 ```
-* msgCenter.putMsg(msg) => 向消息中心推送字符串消息
-* msgCenter.publish(msg) => 发布一个消息,返回一个被打包好的buffer(包头+包体),用户clent发包时使用
+
+- msgCenter.putMsg(msg) => 向消息中心推送字符串消息
+- msgCenter.publish(msg) => 发布一个消息,返回一个被打包好的 buffer(包头+包体),用户 clent 发包时使用
+
 ```
-    msgCenter.publish('123') 
+    msgCenter.publish('123')
     => <Buffer 00 03 31 32 33> // 00 03 包长度  31 32 33 字符串123的ascii码
 ```
-* msgCenter.onMsgRecv(msgHandleFun) => 处理经过粘包处理后的消息
+
+- msgCenter.onMsgRecv(msgHandleFun) => 处理经过粘包处理后的消息
+
 ```
     msgHandleFun:业务上处理消息的函数
     msgCenter.onMsgRecv(msg => {
@@ -116,13 +110,15 @@ npm i stickpackage --save
 
 ## 更新记录:
 
-* 设置大端,小端接收,添加setReadIntBE,添加setReadIntLE方法
-* 支持直接发送字符串消息,自动化组装包头
+- 设置大端,小端接收,添加 setReadIntBE,添加 setReadIntLE 方法
+- 支持直接发送字符串消息,自动化组装包头
 
 ---
 
 ## 使用方法
-* 服务端处理粘包
+
+- 服务端处理粘包
+
 ```
     // 默认client.js 采用 msgCenter.publish('...') 向服务端发消息
     // 以下是服务端收到消息后，进行粘包处理
@@ -140,9 +136,11 @@ npm i stickpackage --save
     //=> recv data: 1234
 
 ```
+
 ---
 
-* 发送二进制数据
+- 发送二进制数据
+
 ```
     // 默认client.js 采用 stick 配置的组包式向服务器发送消息
     // 以下是服务端收到消息后，进行粘包处理
@@ -158,7 +156,7 @@ npm i stickpackage --save
     const data = Buffer.from([0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11, 0x11]);
 
     /*  构造两个buffer
-    *   data2_1包含:  第一个数据包的全部数据,第二个数据包的部分数据	
+    *   data2_1包含:  第一个数据包的全部数据,第二个数据包的部分数据
     *   data2_2包含:  第二个数据包的剩余数据
     */
     const data2_1 = Buffer.from([0x00, 0x00, 0x00, 0x02, 0x66, 0x66, 0x00, 0x04, 0x88, 0x02, 0x11]);
@@ -170,20 +168,23 @@ npm i stickpackage --save
         console.log(data)
     });
 
-    stick.putData(data);        
+    stick.putData(data);
     stick.putData(data2_1);
-    stick.putData(data2_2);  
+    stick.putData(data2_2);
 
-    //  运行结果：   
-    //  receive data,length:4 <Buffer 00 02 66 66>  
+    //  运行结果：
+    //  receive data,length:4 <Buffer 00 02 66 66>
     //  receive data,length:6 <Buffer 00 04 88 02 11 11>
     //  receive data,length:2 <Buffer 00 00> receive data, length:4 < Buffer 00 02 66 66> receive data, length:6< Buffer 00 04 88 02 11 11>
 ```
+
 ---
 
 ## 案例演示
-* tcp client和tcp server 之间通过stick进行粘包处理通信,详细内容见example文件夹
-* [tcp-msg]本demo主要演示TCP中处理粘包的方法，不需要自己组装包头，直接发送和接收文本消息，组包解包操作本类库已经封装在底层
+
+- tcp client 和 tcp server 之间通过 stick 进行粘包处理通信,详细内容见 example 文件夹
+- [tcp-msg]本 demo 主要演示 TCP 中处理粘包的方法，不需要自己组装包头，直接发送和接收文本消息，组包解包操作本类库已经封装在底层
+
 ```
 // Client.js
     const net = require('net')
@@ -205,6 +206,7 @@ npm i stickpackage --save
         console.log('disconnect from server')
     })
 ```
+
 ```
 // Server.js
     const net = require('net')
@@ -237,7 +239,9 @@ npm i stickpackage --save
         console.log('tcp_server listening on 8080')
     })
 ```
-* [tcp-buffer]本demo主要演示TCP中直接处理字节流粘包，展示出如何自己组装包头包体和解包,如不向自己进行组装包头解包操作，请看demo tcp-msg
+
+- [tcp-buffer]本 demo 主要演示 TCP 中直接处理字节流粘包，展示出如何自己组装包头包体和解包,如不向自己进行组装包头解包操作，请看 demo tcp-msg
+
 ```
 // Clinet.js
     const net = require('net')
@@ -265,6 +269,7 @@ npm i stickpackage --save
         console.log('disconnect from server')
     })
 ```
+
 ```
 // Server.js
     const net = require('net')
@@ -305,12 +310,15 @@ npm i stickpackage --save
         console.log('tcp_server listening on 8080')
     })
 ```
+
 ---
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2017-present, ximen (G.doe) 
+Copyright (c) 2017-present, ximen (G.doe)
+
 ```
 
 ## [源码地址，喜欢的话请点star，想订阅点watch](https://github.com/lvgithub/stick)
