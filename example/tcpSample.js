@@ -1,9 +1,9 @@
 'use strict';
 
 const net = require('net');
-const stick_package = require('../index').stick;
-const stick = new stick_package(1024);
-stick.setHeaderLength(4);
+const Stick = require('../index').stick;
+const stick = new Stick(1024);
+stick.setMaxBodyLen(4);
 
 // server端
 const server = net.createServer(socket => {
