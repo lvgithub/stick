@@ -12,6 +12,8 @@ npm i @lvgithub/stick
 
 对要发送的数据进行协议编码，把一份数据`data`分为 `header` +`body`两个结构，header 默认固定长度（_2 byte_），`header`的内容描述的是 `body` 数据的长度。由于`header`定长，因此可以通过解析`header`，动态解析 `body` 的内容。
 
+默认 `header` 我们使用 `2 Byte` 的存储空间，即`Int16`最大表示的 `body` 长度为 `32767`,也就是`16M`。
+
 ![image-20200704170816148](assets/README/image-20200704170816148.png)
 
 如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02`转化为整数的长度是 2，再读取出`body`第3、4位 `0x61, 0x62`。下面是一个简单的demo：
@@ -28,10 +30,12 @@ stick.setMaxBodyLen(MaxBodyLen['32K']);
 
 // server端
 const server = net.createServer(socket => {
+  
     // socket 接收到的 片段 put 到 stick 中处理
     socket.on('data', data => {
         stick.putData(data);
     });
+  
     // stick 会解析好一个个数据包，按照接收的顺序输出
     stick.onBody(body => {
         console.log('body:', body.toString());
@@ -43,10 +47,13 @@ server.listen(8080);
 
 // client 端
 const client = net.createConnection({ port: 8080, host: 'localhost' }, () => {
+  
     // 客户端通过 stick 打包内容
     const data = stick.makeData(JSON.stringify({ userName: 'liuwei' }));
+  
     // 然后把打包对的内容通过 TCP 发送给 服务端
     client.write(data);
+  
     client.destroy();
 });
 ```
@@ -58,7 +65,11 @@ $ node example/sample.js
 body: {"userName":"liuwei"}
 ```
 
+## More Example
 
+* [*sample.js*](./example/sample.js)
+* [*tcpSample.js*](./example/tcpSample.js)
+* [*typescript-sample.js*](./example/typescript/tsSample.ts)
 
 ## API
 
