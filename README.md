@@ -17,59 +17,48 @@ npm i @lvgithub/stick
 如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02`转化为整数的长度是 2，再读取出`body`第3、4位 `0x61, 0x62`。下面是一个简单的demo：
 
 ```javascript
-//example/sample.js
-'use strict';
-const Stick = require('../index').stick;
-const stick = new Stick(1024);
-stick.setHeaderLength(4);
-const log = (...info) => console.log(new Date(), '', ...info);
-
-stick.onBody(function (body) {
-    log('body:', body.toString());
-});
-
-const user = { name: 'liuwei', isVip: true };
-const data = stick.makeData(JSON.stringify(user));
-
-// 在真实的应用场景中这部分代码在客户端中通过TCP 发送给服务端
-// 服务端把接受到的 data,通过 putData 把数据放入 stick
-stick.putData(data);
-```
-
-Output:
-
-```shell
-$ node example/sample.js
-2020-07-05T02:26:45.104Z  body: {"name":"liuwei","isVip":true}
-```
-
-## 实际应用场景
-
-```javascript
-//example/tcpSample.js
+// example/tcpSample.js
 'use strict';
 const net = require('net');
-const stick_package = require('../index').stick;
-const stick = new stick_package(1024);
-stick.setHeaderLength(4);
+const { Stick, MaxBodyLen } = require('../index');
+const stick = new Stick(1024);
+
+// 设置最大传输body大小为 32K，即 header用两个 Byte,最大表示的值为 32767
+stick.setMaxBodyLen(MaxBodyLen['32K']);
 
 // server端
 const server = net.createServer(socket => {
-    socket.on('data', data => stick.putData(data));
-    stick.onBody(body => console.log('body:', body.toString()));
+    // socket 接收到的 片段 put 到 stick 中处理
+    socket.on('data', data => {
+        stick.putData(data);
+    });
+    // stick 会解析好一个个数据包，按照接收的顺序输出
+    stick.onBody(body => {
+        console.log('body:', body.toString());
+    });
+
     server.close();
 });
 server.listen(8080);
 
 // client 端
 const client = net.createConnection({ port: 8080, host: 'localhost' }, () => {
+    // 客户端通过 stick 打包内容
     const data = stick.makeData(JSON.stringify({ userName: 'liuwei' }));
+    // 然后把打包对的内容通过 TCP 发送给 服务端
     client.write(data);
     client.destroy();
 });
 ```
 
----
+Output:
+
+```shell
+$ node example/sample.js
+body: {"userName":"liuwei"}
+```
+
+
 
 ## API
 
