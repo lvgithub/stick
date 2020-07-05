@@ -73,28 +73,50 @@ body: {"userName":"liuwei"}
 
 ## API
 
-- stick(bufferSize) => 直接处理字节类型的包
+- ## Class: Stick
 
-```
-    bufferSize:设置stick处理粘包的缓存空间
-```
+    - **new Stick(bufferSize: number)**
 
-- stick.setReadIntBE(type) => 设置为大端模式<依据数据包最大值选择合适 type>
+         Stick 类用于处理数据包，从流中解析出用户定义的一块快数据
 
-```
-    setReadIntBE(type)  type:16  包头长度为2,short类型
-    setReadIntBE(type)  type:32  包头长度为4,int类型
-```
+        * **bufferSize** Stick处理数据包初始化的缓存大小，默认 512 Bytes
 
-- stick.setReadIntLE => 设置为小端模式<依据数据包最大值选择合适 type>
+        
 
-```
-    setReadIntLE(type)  type:16  包头长度为2,short类型
-    setReadIntLE(type)  type:32  包头长度为4,int类型
-```
+    - **putData(buf: Buffer)**
 
-- stick.putData(buffer) => 向 stick 中推送需要处理粘包的字节流
-- stick.onData(buffer) => 监听 stick 解包好的一个个完整消息(包头+包体),用户自己的数据存储在包体中，如果不想处理包头用 msgCenter 已经封装好
+        往 stick 中put 收到的数据流
+
+        
+
+    - **onData(callback)**
+
+        当收到的数据流中包含了完整的数据块，触发回调返回数据块（`header`+`body`）
+
+        * **callback**: (buf: Buffer): void
+
+        
+
+    - **onBody(callback)**
+
+        当收到的数据流中包含了完整的数据块，触发回调返回数据内容（`body`）
+
+        
+
+    - **makeData(body: string): Buffer**
+
+        用于客户端中，帮助生成符合 Stick 协议的数据块（`data`）
+
+        
+
+    - **setMaxBodyLen(length: MaxBodyLen)**
+
+        设置`body` 的最大长度，提供两种配置见 ** MaxBodyLen**
+
+* #### **Enum: MaxBodyLen**
+
+    * **32K**  最大32kb
+    * **2048M** 最大 2048M 
 
 ## License
 
