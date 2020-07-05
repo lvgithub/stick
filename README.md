@@ -118,6 +118,16 @@ body: {"userName":"liuwei"}
     * **32K**  最大32kb
     * **2048M** 最大 2048M 
 
+    
+
+## 多语言
+
+目前数据打包方式只提供了 Node.Js 包，`stick.makeData()`但现实场景中可能很多时间，客户端是其他语言编写的比如C语言运行在单片机上，这时候大家可以基原理图自行打包，规则所示：
+
+```shell
+data = header(body.length) + body
+```
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
