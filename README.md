@@ -24,13 +24,13 @@ npm i @lvgithub/stick
 
 [API Reference](https://github.com/lvgithub/stick/blob/master/docs/API.md)
 
-## More Example
+## Examples
 
 * [*sample.js*](./example/sample.js)
 * [*tcpSample.js*](./example/tcpSample.js)
 * [*typescript-sample.js*](./example/typescript/tsSample.ts)
 
-## 多语言
+## More Language
 
 目前数据打包方式只提供了 Node.Js 包，`stick.makeData()`但现实场景中可能很多时间，客户端是其他语言编写的比如C语言运行在单片机上，这时候大家可以基原理图自行打包，规则所示：
 
