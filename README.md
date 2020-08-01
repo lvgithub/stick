@@ -8,7 +8,7 @@
 
 默认 `header` 我们使用 `2 Byte` 的存储空间，即`Int16`最大表示的 `body` 长度为 `32767`,也就是`16M`。
 
-![Schematic](assets/README/schematic.png)
+![Schematic](https://tva1.sinaimg.cn/large/007S8ZIlly1ghbjj1w0ykj30wm0c0ad1.jpg)
 
 如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02`转化为整数的长度是 2，再读取出`body`第3、4位 `0x61, 0x62`。
 
