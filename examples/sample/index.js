@@ -1,13 +1,11 @@
-import { Stick, MaxBodyLen } from '../..';
+// example/sample.js
+'use strict';
+const Stick = require('../../index').Stick;
+const stick = new Stick(1024);
 
-const stick = new Stick(256);
+const log = (...info) => console.log(new Date(), '', ...info);
 
-// 设置 body 最大值为 32k 
-stick.setMaxBodyLen(MaxBodyLen["32K"]);
-
-const log = (...info: any) => console.log(new Date(), '', ...info);
-
-stick.onBody((body: Buffer) => {
+stick.onBody(function (body) {
     log('body:', body.toString());
 });
 

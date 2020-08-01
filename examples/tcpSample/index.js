@@ -2,7 +2,7 @@
 'use strict';
 
 const net = require('net');
-const { Stick, MaxBodyLen } = require('../index');
+const { Stick, MaxBodyLen } = require('../../index');
 const stick = new Stick(1024);
 
 // 设置最大传输body大小为 32K，即 header用两个 Byte,最大表示的值为 32767
