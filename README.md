@@ -1,9 +1,3 @@
-## Install
-
-```shell
-npm i @lvgithub/stick
-```
-
 # Introduction
 
 由于 TCP 协议是面向流的协议，我们使用 TCP 通信的时候，由于TCP是面向流的，因此需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个处理方案。[喜欢的话 star，想订阅点 watch~](https://github.com/lvgithub/stick)
@@ -14,11 +8,13 @@ npm i @lvgithub/stick
 
 默认 `header` 我们使用 `2 Byte` 的存储空间，即`Int16`最大表示的 `body` 长度为 `32767`,也就是`16M`。
 
-![image-20200704170816148](assets/README/image-20200704170816148.png)
+![Schematic](assets/README/schematic.png)
 
 如上图，我们看先取出数据流的前两位，读取到内容 `0x00, 0x02`转化为整数的长度是 2，再读取出`body`第3、4位 `0x61, 0x62`。
 
 ## Links
+
+[Install](https://www.npmjs.com/package/@lvgithub/stick)
 
 [Getting Started](https://github.com/lvgithub/stick/blob/master/docs/GettingStarted.md)
 
