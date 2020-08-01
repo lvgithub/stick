@@ -1,14 +1,11 @@
 {
   "name": "@lvgithub/stick",
-  "version": "3.1.8",
+  "version": "3.1.9",
   "description": "The solution of sticky package problem of TCP for Node.Js !",
   "types": "./typings/stick.d.ts",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "push:npm": "npm publish  --registry=https://registry.npmjs.org",
-    "push:githubnpm": "npm publish  --registry=https://npm.pkg.github.com/lvgithub",
-    "publish": "npm run push:npm && npm run push:githubnpm"
+    "test": "jest"
   },
   "repository": "https://github.com/lvgithub/stick.git",
   "keywords": [
