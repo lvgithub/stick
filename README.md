@@ -24,11 +24,9 @@ npm i @lvgithub/stick
 
 [API Reference](https://github.com/lvgithub/stick/blob/master/docs/API.md)
 
-## Examples
+[Examples](https://github.com/lvgithub/stick/blob/master/examples/readme.md)
 
-* [*sample.js*](./example/sample.js)
-* [*tcpSample.js*](./example/tcpSample.js)
-* [*typescript-sample.js*](./example/typescript/tsSample.ts)
+[License](http://opensource.org/licenses/MIT)
 
 ## More Language
 
@@ -37,7 +35,3 @@ npm i @lvgithub/stick
 ```shell
 data = header(body.length) + body
 ```
-
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
