@@ -2,7 +2,8 @@
 
 由于 TCP 协议是面向流的协议，我们使用 TCP 通信的时候，由于TCP是面向流的，因此需要对流进行解析。也就是所谓的拆包，把流解析为一段段我们所需要的数据。本方案为 Node.Js 实现的一个处理方案。
 
-[喜欢的话 star，订阅更新点 watch~](https://github.com/lvgithub/stick)
+[喜欢的话 star，订阅 watch~](https://github.com/lvgithub/stick)
+
 [Solve the problem of "sticking packets" for TCP network transmission (Classic)](https://topic.alibabacloud.com/a/solve-the-problem-font-colorredoffont-quotsticking-font-colorredpacketsfontquot-for-tcp-network-transmission-classic_8_8_31915399.html)
 ## Schematic
 
