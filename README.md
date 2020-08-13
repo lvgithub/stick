@@ -1,6 +1,10 @@
 
 <div align="left">
-
+  
+![issues](https://img.shields.io/github/issues/lvgithub/stick)
+![forks](https://img.shields.io/github/forks/lvgithub/stick)
+![stars](https://img.shields.io/github/stars/lvgithub/stick)
+![linces](https://img.shields.io/github/license/lvgithub/stick)
 ![npm](http://img.shields.io/npm/v/@lvgithub/stick.svg?style=flat-square)
 ![david](https://img.shields.io/david/lvgithub/stick?style=flat-square)
 ![downloads](https://img.shields.io/npm/dm/@lvgithub/stick.svg?style=flat-square)
