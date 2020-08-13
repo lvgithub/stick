@@ -46,5 +46,4 @@ data = header(body.length) + body
 ```
 
 ## [License](http://opensource.org/licenses/MIT)
-
-![MIT][s2]
+MIT
