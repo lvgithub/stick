@@ -18,7 +18,6 @@
 
 🌈  [喜欢的话 star，订阅 watch~](https://github.com/lvgithub/stick)
 
-🌍  [Solve the problem of "sticking packets" for TCP network transmission (Classic)](https://topic.alibabacloud.com/a/solve-the-problem-font-colorredoffont-quotsticking-font-colorredpacketsfontquot-for-tcp-network-transmission-classic_8_8_31915399.html)
 ## Schematic
 
 对要发送的数据按协议编码，把数据 `data` 分为 `header` +`body `两部分，header 默认固定长度（_2 byte_），`header`描述的是 `body` 数据的长度。由于`header`定长，因此可以通过`header`，解析出 `body` 的内容。
@@ -39,7 +38,7 @@
 
 [Examples](https://github.com/lvgithub/stick/blob/master/examples/readme.md)
 
-
+🌍  [Solve the problem of "sticking packets" for TCP network transmission (Classic)](https://topic.alibabacloud.com/a/solve-the-problem-font-colorredoffont-quotsticking-font-colorredpacketsfontquot-for-tcp-network-transmission-classic_8_8_31915399.html)
 
 ## More Language
 
