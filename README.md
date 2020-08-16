@@ -11,7 +11,7 @@
 
 </div>
 
-🌈  [喜欢的话 star，订阅 watch~](https://github.com/lvgithub/stick)
+🌈  [If you like it, please click on the "Star" button](https://github.com/lvgithub/stick)
 
 # Introduction
 
