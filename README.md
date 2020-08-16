@@ -37,7 +37,7 @@
 
 🌍 [Solve the problem of "sticking packets" for TCP network transmission (Classic)](https://topic.alibabacloud.com/a/solve-the-problem-font-colorredoffont-quotsticking-font-colorredpacketsfontquot-for-tcp-network-transmission-classic_8_8_31915399.html)
 
-## More Language
+## Other Language
 
 现实场景中客户端是其他语言编写的比如C语言运行在单片机上，这时候大家可以基原理图自行打包，规则所示：
 
