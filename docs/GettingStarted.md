@@ -8,6 +8,10 @@ const stick = new Stick(1024);
 // 设置最大传输body大小为 32K，即 header用两个 Byte,最大表示的值为 32767
 stick.setMaxBodyLen(MaxBodyLen['32K']);
 
+// stick 会解析好一个个数据包，按照接收的顺序输出
+stick.onBody(body => {
+    console.log('body:', body.toString());
+});
 // server端
 const server = net.createServer(socket => {
   
@@ -16,10 +20,7 @@ const server = net.createServer(socket => {
         stick.putData(data);
     });
   
-    // stick 会解析好一个个数据包，按照接收的顺序输出
-    stick.onBody(body => {
-        console.log('body:', body.toString());
-    });
+    
 
     server.close();
 });

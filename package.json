@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/lvgithub/stick#readme",
   "devDependencies": {
+    "eslint": "^7.27.0",
     "jest": "^26.1.0"
   }
 }
